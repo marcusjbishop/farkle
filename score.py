@@ -1,9 +1,8 @@
-def points(l):
-  if type(l)<>list or 6<len(l):
-    raise Exception("l not a list of correct length")
-  l.sort()
-  if l==range(1,7):return 1500
-  m=[l.count(i) for i in range(1,7)]
+# calculate value of roll with frequency vector m
+def points(m):
+  if type(m)<>list or 6<>len(m):
+    raise Exception("m not a list of length six")
+  if 6==m.count(1):return 1500
   if 3==m.count(2):return 7500
   s=0
   if m[0]==1 or m[0]==2:s+=100*m[0]
