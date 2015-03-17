@@ -1,0 +1,7 @@
+The player receives a comma-seperated list
+of natural numbers of length <=6
+with no whitespace on the standard input.
+
+We assume that the combination does not include
+three pair or a straight, since the dealer won't need
+to communicate with the player in those cases.

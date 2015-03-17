@@ -1,5 +1,5 @@
 def points(l):
-  if type(l)<>list or 6<>len(l):
+  if type(l)<>list or 6<len(l):
     raise Exception("l not a list of correct length")
   l.sort()
   if l==range(1,7):return 1500
