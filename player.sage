@@ -1,18 +1,31 @@
 load('possible.sage')
-pp=[possibleOutcomes(i) for i in range(7)]
+pp=[possibleOutcomes(i) for i in range(6)]
+def v2d(m):
+  l=list()
+  for i in range(6):
+    l.extend([i+1]*m[i])
+  return l
 
-def decide(dice,p): # p=points so far
-  if type(dice)<>list or 6<len(dice):
-    raise Exception("dice not a list of proper length")
-  if type(p)<>Integer or p<=0:
-    raise Exception("p not a natural number")
-  m=[dice.count(i) for i in range(1,7)]
-  score=points(m)
-  keep=[x for x in dice if x==1 or x==5]
-  reroll=[x for x in dice if x<>1 and x<>5]
+def d2v(l):
+  return vector([l.count(i) for i in range(1,7)])
+
+def decide(dice,previous):
+  m=d2v(dice)
+  canKeep=vector([m[0],0,0,0,m[4],0])
+  for i in [1,2,3,5]:
+    if m[i]>2:canKeep[i]=m[i]
+  mustReroll=m-canKeep
   choices=[]
-  for x in subsets(reroll):
-    s=sum(y['prob']*(y['score']+score) for y in pp[len(x)])
-    choices.append({'reroll':x,'exp':N(s)}) 
-  return choices
+  for x in subsets(v2d(canKeep)):
+    x.extend(v2d(mustReroll))
+    if len(x)==len(dice):break
+    reroll=d2v(x)
+    keep=m-reroll
+    score=points(keep)
+    exp=sum(x['prob']*(x['score']+score+previous)
+      for x in pp[len(x)])
+    choices.append({'reroll':x,'exp':N(exp),'score':score+previous}) 
+  mx=max(x['exp'] for x in choices)
+  best=[x for x in choices if x['exp']==mx]
+  return best[0]['reroll'],best[0]['score']
   
