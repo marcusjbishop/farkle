@@ -49,5 +49,6 @@ def decide(dice,previous):
       {'reroll':x,'exp':exp,'score':score+previous}) 
   mx=max(x['exp'] for x in choices)
   best=[x for x in choices if x['exp']==mx]
-  return best[0]['reroll']
+  return best[0]
+  # If there are several, should we pick a different one?
   
