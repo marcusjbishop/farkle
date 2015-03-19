@@ -1,3 +1,4 @@
+load('score.py')
 load('p.py')
 def v2d(m):
   l=list()
@@ -24,7 +25,7 @@ def decide(dice,previous):
     exp=sum(x['prob']*(x['score']+score+previous)
       for x in pp[len(x)])
     choices.append(
-      {'reroll':x,'exp':N(exp),'score':score+previous}) 
+      {'reroll':x,'exp':exp,'score':score+previous}) 
   mx=max(x['exp'] for x in choices)
   best=[x for x in choices if x['exp']==mx]
   return best[0]['reroll']

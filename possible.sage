@@ -13,5 +13,5 @@ def possibleOutcomes(n):
     if not x in F:
       m=multinomial(x)
       p=points(x)
-      D.append({'dice':x,'num':m,'prob':m/6**n,'score':p})
+      D.append({'dice':x,'num':m,'prob':N(m/6**n),'score':p})
   return D
