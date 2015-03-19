@@ -1,5 +1,4 @@
-load('possible.sage')
-pp=[possibleOutcomes(i) for i in range(6)]
+load('p.py')
 def v2d(m):
   l=list()
   for i in range(6):
@@ -24,8 +23,9 @@ def decide(dice,previous):
     score=points(keep)
     exp=sum(x['prob']*(x['score']+score+previous)
       for x in pp[len(x)])
-    choices.append({'reroll':x,'exp':N(exp),'score':score+previous}) 
+    choices.append(
+      {'reroll':x,'exp':N(exp),'score':score+previous}) 
   mx=max(x['exp'] for x in choices)
   best=[x for x in choices if x['exp']==mx]
-  return best[0]['reroll'],best[0]['score']
+  return best[0]['reroll']
   
