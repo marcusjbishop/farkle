@@ -29,6 +29,8 @@ def decide(dice,previous):
   canKeep=[m[0],0,0,0,m[4],0]
   for i in [1,2,3,5]:
     if m[i]>2:canKeep[i]=m[i]
+  if 0==sum(canKeep):
+    raise Exception("Farkle!")
   mustReroll=subtract(m,canKeep)
   choices=[]
   stay=points(m)+previous
