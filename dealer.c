@@ -1,6 +1,4 @@
-#include<stdio.h>
-#include<unistd.h>
-#include<time.h>
+#include<stdio.h> #include<unistd.h> #include<time.h>
 #include<stdlib.h>
 #include<sys/select.h>
 #include"score.c"
@@ -56,7 +54,6 @@ main(void)
     FD_SET(g[0], &rset);
     n = select(g[0] + 1, &rset, NULL, NULL, NULL);
     printf("parent read select returned %d\n", n);
-    //s[0]=0;
     n = read(g[0], s, 12);
     printf("parent read %d bytes of %s\n", n, s);
 
@@ -64,14 +61,16 @@ main(void)
     //Child
     close(f[1]);
     close(g[0]);
-    dup2(f[0], STDIN_FILENO);
-    dup2(g[1], STDOUT_FILENO);
+    dup2(f[0], 0);
+    dup2(g[1], 1);
     close(f[0]);
     close(g[1]);
 
-    n=read(STDIN_FILENO,s,13);
+    //read(0,s,13);
+    fgets(s,13,stdin);
     s[0]=100;
-    write(STDOUT_FILENO,s,sizeof(s));
+    //write(1,s,sizeof(s));
+    fprintf(stdout,s);
 
  //   execve("/Users/marcus/farkle/player.py", NULL, NULL);
   }
