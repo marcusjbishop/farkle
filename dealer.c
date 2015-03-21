@@ -49,39 +49,30 @@ main(void)
     printDice(dice, s);
     n = select(f[1] + 1, NULL, &wset, NULL, NULL);
     printf("parent write select returned %d\n", n);
-    n = write(f[1], s, 11);
+    n = write(f[1], s, sizeof(s));
     printf("parent wrote %d bytes of %s\n", n, s);
 
     FD_ZERO(&rset);
     FD_SET(g[0], &rset);
     n = select(g[0] + 1, &rset, NULL, NULL, NULL);
     printf("parent read select returned %d\n", n);
+    //s[0]=0;
     n = read(g[0], s, 12);
     printf("parent read %d bytes of %s\n", n, s);
 
   } else {
     //Child
+    close(f[1]);
+    close(g[0]);
+    dup2(f[0], STDIN_FILENO);
+    dup2(g[1], STDOUT_FILENO);
+    close(f[0]);
+    close(g[1]);
 
-      FD_ZERO(&rset);
-    FD_SET(f[0], &rset);
-    n = select(f[0] + 1, &rset, NULL, NULL, NULL);
-    printf("child read select returned %d\n", n);
-    n = read(f[0], s, 11);
-    printf("child read %d bytes of %s\n", n, s);
-    /*
-     * FD_ZERO(&wset); FD_SET(g[1], &wset); n=select(g[1] + 1, NULL, &wset,
-     * NULL, NULL); printf("child write select returned %d\n",n);
-     */
-    sprintf(s, "123456789te");
-    n = write(g[1], s, 11);
-    printf("child wrote %d bytes of %s\n", n, s);
-    /*
-     * close(f[1]); close(g[0]); dup2(f[0], STDIN_FILENO); dup2(g[1],
-     * STDOUT_FILENO); close(f[0]); close(g[1]); gets(s); printf("%s\n",s);
-     */
+    n=read(STDIN_FILENO,s,13);
+    s[0]=100;
+    write(STDOUT_FILENO,s,sizeof(s));
 
-
-
-    //execve("/Users/marcus/farkle/player.py", NULL, NULL);
+ //   execve("/Users/marcus/farkle/player.py", NULL, NULL);
   }
 }
