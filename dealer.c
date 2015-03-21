@@ -26,8 +26,9 @@ main(void)
   int		  g        [2];
   int		  pid;
   fd_set	  wset  , rset;
-  char		  s       [11];
+  char		  s       [12];
   int		  dice     [6];
+  int		  n;
 
   if ((pipe(f)) < 0)
     perror("pipe failed");
@@ -38,7 +39,7 @@ main(void)
   } else if (pid > 0) {
     //Parent
 
-    close(f[0]);
+      close(f[0]);
     close(g[1]);
 
     FD_ZERO(&wset);
@@ -46,26 +47,41 @@ main(void)
     srand(time(NULL));
     roll(dice);
     printDice(dice, s);
-    select(f[1] + 1, NULL, &wset, NULL, NULL);
-    if (11 != write(f[1], s, 11))
-      perror("didn't write so well");
-    printf("wrote %s\n", s);
+    n = select(f[1] + 1, NULL, &wset, NULL, NULL);
+    printf("parent write select returned %d\n", n);
+    n = write(f[1], s, 11);
+    printf("parent wrote %d bytes of %s\n", n, s);
 
     FD_ZERO(&rset);
     FD_SET(g[0], &rset);
-    //select(NULL, g[0] + 1, &rset, NULL, NULL);
-    printf("we're reading\n");
-    //read(g[0], s, 11);
-    printf("read %s\n", s);
+    n = select(g[0] + 1, &rset, NULL, NULL, NULL);
+    printf("parent read select returned %d\n", n);
+    n = read(g[0], s, 12);
+    printf("parent read %d bytes of %s\n", n, s);
 
   } else {
     //Child
 
-    close(f[1]);
-    close(g[0]);
-    dup2(f[0], 0);
-    dup2(g[1], 1);
-    printf("child, we're grand\n");
-    execve("/Users/marcus/farkle/player.py", NULL, NULL);
+      FD_ZERO(&rset);
+    FD_SET(f[0], &rset);
+    n = select(f[0] + 1, &rset, NULL, NULL, NULL);
+    printf("child read select returned %d\n", n);
+    n = read(f[0], s, 11);
+    printf("child read %d bytes of %s\n", n, s);
+    /*
+     * FD_ZERO(&wset); FD_SET(g[1], &wset); n=select(g[1] + 1, NULL, &wset,
+     * NULL, NULL); printf("child write select returned %d\n",n);
+     */
+    sprintf(s, "123456789te");
+    n = write(g[1], s, 11);
+    printf("child wrote %d bytes of %s\n", n, s);
+    /*
+     * close(f[1]); close(g[0]); dup2(f[0], STDIN_FILENO); dup2(g[1],
+     * STDOUT_FILENO); close(f[0]); close(g[1]); gets(s); printf("%s\n",s);
+     */
+
+
+
+    //execve("/Users/marcus/farkle/player.py", NULL, NULL);
   }
 }
