@@ -26,6 +26,7 @@ def decide(dice,previous):
       for x in pp[len(x)])
     choices.append(
       {'reroll':x,'exp':exp,'score':score+previous}) 
+    return choices
   mx=max(x['exp'] for x in choices)
   best=[x for x in choices if x['exp']==mx]
   return best[0]['reroll']
