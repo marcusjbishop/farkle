@@ -39,7 +39,7 @@ def decide(dice,previous):
       {'reroll':[],'exp':stay,'score':stay}) 
   for x in uniq(subsets(v2d(canKeep))):
     x.extend(v2d(mustReroll))
-    if len(x)==6:break
+    if len(x)==len(dice):break
     reroll=d2v(x)
     keep=subtract(m,reroll)
     score=points(keep)
