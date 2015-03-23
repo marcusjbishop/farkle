@@ -16,7 +16,7 @@ def player():
     s=''.join([str(x) for x in d['reroll']])
     if s=='':s='-1'
     print >>sys.stdout,s
-    sys.stdout.flush()
+    #sys.stdout.flush()
     f.write('wrote '+s+'\n')
     if []==d['reroll']:break
 

@@ -44,7 +44,7 @@ main(void)
   } else if (pid > 0) {
     //Parent
 
-      close(f[0]);
+    close(f[0]);
     close(g[1]);
     FD_ZERO(&wset);
     FD_SET(f[1], &wset);
@@ -53,7 +53,6 @@ main(void)
     srand(time(NULL));
     roll(dice);
     printDice(dice, s, 6);
-    printf("%s", s);
     n = select(f[1] + 1, NULL, &wset, NULL, &t);
     printf("parent write select returned %d\n", n);
     n = write(f[1], s, strlen(s));
@@ -70,12 +69,12 @@ main(void)
       exit(1);
     }
     printf("parent read select returned %d\n", n);
-    n = read(g[0], s, 12);
+    n = read(g[0], s, 8);
     printf("parent read %d bytes of %s\n", n, s);
 
   } else {
     //Child
-      close(f[1]);
+    close(f[1]);
     close(g[0]);
     dup2(f[0], 0);
     dup2(g[1], 1);
