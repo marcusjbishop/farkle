@@ -6,23 +6,6 @@
 #include<string.h>
 #include"score.c"
 
-void
-roll(int *dice)
-{
-  int		  i;
-  for (i = 0; i < 6; i++)
-    dice[i] = rand() % 6 + 1;
-}
-
-void
-printDice(int *v, char *s, int n)
-{
-  int		  i;
-  for (i = 0; i < n; i++)
-    s[i] = v[i] + 48;
-  s[n] = '\n';
-}
-
 int
 main(void)
 {
@@ -41,8 +24,17 @@ main(void)
     perror("pipe failed");
   if ((pid = fork()) < 0) {
     perror("fork failed");
-  } else if (pid > 0) {
-    //Parent
+  } else if (pid ==0) { //Child
+    close(f[1]);
+    close(g[0]);
+    dup2(f[0], 0);
+    dup2(g[1], 1);
+    close(f[0]);
+    close(g[1]);
+    setvbuf(stdout, NULL, _IOLBF, 6);
+    /* fgets(s,7,stdin); s[0]=100; puts(s); */
+    execve("/Users/marcus/farkle/player.py", NULL, NULL);
+  } else { //Parent
 
     close(f[0]);
     close(g[1]);
@@ -72,17 +64,5 @@ main(void)
     n = read(g[0], s, 8);
     printf("parent read %d bytes of %s\n", n, s);
 
-  } else {
-    //Child
-    close(f[1]);
-    close(g[0]);
-    dup2(f[0], 0);
-    dup2(g[1], 1);
-    close(f[0]);
-    close(g[1]);
-    setvbuf(stdout, NULL, _IOLBF, 6);
-    /* fgets(s,7,stdin); s[0]=100; puts(s); */
-
-    execve("/Users/marcus/farkle/player.py", NULL, NULL);
   }
 }
