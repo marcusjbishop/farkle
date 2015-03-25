@@ -44,7 +44,7 @@ points(int *dice, int n)
     if (m[i] == 2)
       j++;
   if (j == 3)
-    return 7500;
+    return 750;
 
   /* Ones and fives worth 100 and 500 */
   if (m[0] == 1 || m[0] == 2)
