@@ -13,12 +13,13 @@ printDice(int *v, char *s, int n)
   for (i = 0; i < n; i++)
     s[i] = v[i] + 48;
   s[n] = '\n';
+  s[n+1]=(char)0;
 }
 
 int parseResponse(char *s,int *m){
-  int i=0;
+  int i;
   int newNdice=0;
-  while(s[i]!='\n'){
+  for(i=0;s[i]!='\n';i++){
     if(s[i]<49||s[i]>s[i]>54){
       fprintf(stderr,"Cant parse %s\n",s);
       exit(1);
@@ -70,11 +71,11 @@ points(int *m){
   int		  i       ;
   int		  score = 0;
 
-  /* Ones and fives worth 100 and 500 */
+  /* Ones and fives worth 100 and 50 */
   if (m[0] == 1 || m[0] == 2)
     score += 100 * m[0];
   if (m[4] == 1 || m[4] == 2)
-    score += 50 * m[0];
+    score += 50 * m[4];
 
   /* Three-of-a-kind */
   if (m[0] > 2)
