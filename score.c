@@ -1,39 +1,35 @@
-void
-roll(int *dice)
-{
+void roll(int *dice) {
   int		  i;
   for (i = 0; i < 6; i++)
     dice[i] = rand() % 6 + 1;
 }
 
-void
-printDice(int *v, char *s, int n)
-{
+void printDice(int *v, char *s, int n) {
   int		  i;
   for (i = 0; i < n; i++)
     s[i] = v[i] + 48;
   s[n] = '\n';
-  s[n+1]=(char)0;
+  s[n + 1] = (char)0;
 }
 
-int parseResponse(char *s,int *m){
-  int i;
-  int newNdice=0;
-  for(i=0;s[i]!='\n';i++){
-    if(s[i]<49||s[i]>s[i]>54){
-      fprintf(stderr,"Cant parse %s\n",s);
+int parseResponse(char *s, int *m) {
+  int		  i;
+  int		  newNdice = 0;
+  for (i = 0; s[i] != '\n'; i++) {
+    if (s[i] < 49 || s[i] > s[i] > 54) {
+      fprintf(stderr, "Cant parse %s\n", s);
       exit(1);
     }
-    m[i-49]--;
+    m[i - 49]--;
     newNdice++;
   }
   return newNdice;
 }
 
-void frequencyVector(int *dice,int *m,int n){
-  int i,j;
-  for(i=0;i<6;i++)
-    m[i]=0;
+void frequencyVector(int *dice, int *m, int n) {
+  int		  i       , j;
+  for (i = 0; i < 6; i++)
+    m[i] = 0;
   for (j = 0; j < 6; j++) {
     for (i = 0; i < n; i++) {
       if (dice[i] == j + 1)
@@ -42,8 +38,8 @@ void frequencyVector(int *dice,int *m,int n){
   }
 }
 
-int straight(int *m){
-  int i,j;
+int straight(int *m) {
+  int		  i       , j;
   j = 0;
   for (i = 0; i < 6; i++)
     if (m[i] == 1)
@@ -54,8 +50,8 @@ int straight(int *m){
     return 0;
 }
 
-int threePair(int *m){
-  int i,j;
+int threePair(int *m) {
+  int		  i       , j;
   j = 0;
   for (i = 0; i < 6; i++)
     if (m[i] == 2)
@@ -66,9 +62,8 @@ int threePair(int *m){
     return 0;
 }
 
-int
-points(int *m){
-  int		  i       ;
+int points(int *m) {
+  int		  i;
   int		  score = 0;
 
   /* Ones and fives worth 100 and 50 */
