@@ -29,17 +29,19 @@ def decide(dice,previous):
   canKeep=[m[0],0,0,0,m[4],0]
   for i in [1,2,3,5]:
     if m[i]>2:canKeep[i]=m[i]
-  if 0==sum(canKeep):
-    raise Exception("Farkle!")
   mustReroll=subtract(m,canKeep)
   choices=[]
   stay=points(m)+previous
   if stay>=300:
+    xTurn=False
+    if canKeep==m or m.count(1)==6 or m.count(2)==3:
+      xTurn=True
     choices.append(
-      {'reroll':[],'exp':stay,'score':stay}) 
+      {'reroll':[],'exp':stay,'score':stay,'xTurn':xTurn}) 
   for x in uniq(subsets(v2d(canKeep))):
     x.extend(v2d(mustReroll))
-    if len(x)==len(dice):break
+    if x==[]:continue
+    if len(x)==len(dice):continue
     reroll=d2v(x)
     keep=subtract(m,reroll)
     score=points(keep)
